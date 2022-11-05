@@ -6,13 +6,29 @@ from sys import exit
 
 
 class Door:
-    def __init__(self, rectx, recty, img):
-        self.img = pygame.image.load(img).convert_alpha()
-        self.rect = self.img.get_rect(center=(rectx, recty))
-        self.mask = pygame.mask.from_surface(self.img)
+    def __init__(self, rectx, recty, closedImg, openImg):
+        self.closed = pygame.image.load(closedImg).convert_alpha()
+        self.open = pygame.image.load(openImg).convert_alpha()
+        self.rect = self.closed.get_rect(center=(rectx, recty))
+        self.mask = pygame.mask.from_surface(self.closed)
+        self.rectB = self.open.get_rect(center=(rectx, recty))
+        self.maskB = pygame.mask.from_surface(self.open)
+        self.flag = False
+
+    def draw(self):
+        if self.flag:
+            screen.blit(self.open, self.rect)
+        else:
+            screen.blit(self.closed, self.rect)
+
+    def setFlag(self, flag):
+        self.flag = flag
 
     def changeXandY(self, rectx):
-        self.rect = self.img.get_rect(center=(rectx, 500))
+        self.rect = self.closed.get_rect(center=(rectx, 500))
+
+    def changeXandYB(self, rectx):
+        self.rect = self.open.get_rect(center=(rectx, 500))
 
 
 pygame.init()
@@ -25,10 +41,7 @@ test_font = pygame.font.Font('font/Pixeltype.ttf', 50)
 cat_surface = pygame.image.load('graphics/cat.png').convert()
 # ground_surface = pygame.image.load('graphics/ground.png').convert()
 text_surface = test_font.render('My game', False, 'Red')
-
-# Place Doors
-#d1A = pygame.image.load('graphics/Door1A.png').convert_alpha()
-d1B = pygame.image.load('graphics/Door1B.png').convert()
+keyUI = pygame.image.load('graphics/UI.png').convert_alpha()
 
 
 # Variables
@@ -43,10 +56,32 @@ screen_change = 0
 rect_change = 0
 keyflag = False
 doorOpen = True
+doorlen = 2
+x = 1
+doorlist = []
+touching = False
+posClick = any
+
+rflag = False
+lflag = False
 
 
-door = Door(rectx, recty, 'graphics/Door1A.png')
-door2 = Door(rectx, recty, 'graphics/cuckooclock.png')
+while (x <= doorlen):
+    file = 'graphics/Door' + str(x) + 'A.png'
+    fileB = 'graphics/Door' + str(x) + 'B.png'
+    door = Door(rectx, recty, file, fileB)
+    doorlist.append(door)
+    x += x
+
+
+def addSpeed():
+    print('yes')
+    global screen_pos, rectx
+    screen_pos += screen_change
+    rectx += rect_change
+    for i in doorlist:
+        i.changeXandY(rectx)
+
 
 # will never be false and must be broken from the inside
 while True:
@@ -60,47 +95,53 @@ while True:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
                 keyflag = True
-                screen_change = -8
-                rect_change = -8
+                rflag = True
+                lflag = False
+                screen_change = -15
+                rect_change = -15
             elif event.key == pygame.K_LEFT:
                 keyflag = True
-                screen_change = 8
-                rect_change = 8
+                rflag = False
+                lflag = True
+                screen_change = 15
+                rect_change = 15
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT:
                 screen_change = 0
                 rect_change = 0
                 keyflag = False
+                rflag = False
+                lflag = False
             elif event.key == pygame.K_LEFT:
                 screen_change = 0
                 rect_change = 0
                 keyflag = False
+                rflag = False
+                lflag = False
+
+        if event.type == pygame.MOUSEBUTTONUP:
+            posClick = pygame.mouse.get_pos()
 
     if keyflag == True:
-        screen_pos += screen_change
-        rectx += rect_change
-        door.changeXandY(rectx)
-
-    if screen_pos >= screenLeftMax:
-        screen_pos = screenLeftMax
-    if screen_pos <= screenRightMax:
-        screen_pos = screenRightMax
-
-    #screen.blit(d1A, (screen_pos, 0))
-    # screen.blit(ground_surface, (0, 300))
+        if (screen_pos <= screenLeftMax and screen_pos >= screenRightMax):
+            addSpeed()
+        elif (screen_pos >= screenLeftMax and rflag == True):
+            addSpeed()
+        elif (screen_pos <= screenRightMax and lflag == True):
+            addSpeed()
 
     pos = pygame.mouse.get_pos()
-    pos_in_mask = pos[0] - door.rect.x, pos[1] - door.rect.y
-    touching = door.rect.collidepoint(*pos) and door.mask.get_at(pos_in_mask)
-    if touching:
-        print('touch')
 
-    screen.fill(pygame.Color('red') if touching else pygame.Color('green'))
     screen.blit(cat_surface, (screen_pos, 0))  # block image transfer
-    screen.blit(door.img, door.rect)
-    screen.blit(door2.img, door2.rect)
+
+    for i in doorlist:
+        pos_in_mask = pos[0] - i.rect.x, pos[1] - i.rect.y
+        touching = i.rect.collidepoint(*pos) and i.mask.get_at(pos_in_mask)
+        if touching and pos == posClick:
+            i.setFlag(True)
+        i.draw()
 
     screen.blit(text_surface, (350, 50))
-
+    screen.blit(keyUI, (0, 0))
     pygame.display.update()
     clock.tick(60)  # constant frame rate
