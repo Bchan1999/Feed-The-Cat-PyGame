@@ -56,7 +56,7 @@ screen_change = 0
 rect_change = 0
 keyflag = False
 doorOpen = True
-doorlen = 2
+doorlen = 5
 x = 1
 doorlist = []
 touching = False
@@ -65,13 +65,18 @@ posClick = any
 rflag = False
 lflag = False
 
-
+#loads all door images from graphics
+#x variable defines how many doors need to be loaded into the game
+#A is closed door
+#B is open door
 while (x <= doorlen):
     file = 'graphics/Door' + str(x) + 'A.png'
     fileB = 'graphics/Door' + str(x) + 'B.png'
     door = Door(rectx, recty, file, fileB)
     doorlist.append(door)
-    x += x
+    x += 1
+
+print(doorlist)
 
 
 def addSpeed():
