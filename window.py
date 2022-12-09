@@ -38,6 +38,7 @@ x = 1
 
 doorlist = []
 keyList = []
+mouseKeys = []
 
 touching = False
 posClick = any
@@ -45,13 +46,16 @@ posClick = any
 rflag = False
 lflag = False
 
+# state
+keyState = 0
+
 # loads all door images from graphics
 # x variable defines how many doors need to be loaded into the game
 # A is closed door
 # B is open door
 while (x <= doorlen):
-    file = 'graphics/Door' + str(x) + 'A.png'
-    fileB = 'graphics/Door' + str(x) + 'B.png'
+    file = 'graphics/Doors/Door' + str(x) + 'A.png'
+    fileB = 'graphics/Doors/Door' + str(x) + 'B.png'
     door = Door(screen, rectx, recty, file, fileB)
     doorlist.append(door)
 
@@ -59,11 +63,11 @@ while (x <= doorlen):
     keyHighlightFile = 'graphics/Keys/Key' + str(x) + 'H.png'
     key = Key(screen, keyFile, keyHighlightFile, rectx, recty)
     keyList.append(key)
+
+    mouseFile = 'graphics/MouseKeys/Key' + str(x) + '.png'
+    player = Player(mouseFile, screen)
+    mouseKeys.append(player)
     x += 1
-
-print(doorlist)
-
-player = Player('graphics/Keys/Key3.png', screen)
 
 
 def addSpeed():
@@ -97,6 +101,12 @@ while True:
                 lflag = True
                 screen_change = 15
                 rect_change = 15
+            if event.key == pygame.K_UP:
+                if (len(mouseKeys) - 1 == keyState):
+                    keyState = 0
+                else:
+                    keyState += 1
+                print(keyState)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT:
                 screen_change = 0
@@ -110,7 +120,12 @@ while True:
                 keyflag = False
                 rflag = False
                 lflag = False
-
+            if event.key == pygame.K_DOWN:
+                if (keyState == 0):
+                    keyState = len(mouseKeys) - 1
+                else:
+                    keyState -= 1
+                print(keyState)
         if event.type == pygame.MOUSEBUTTONUP:
             posClick = pygame.mouse.get_pos()
 
@@ -126,19 +141,30 @@ while True:
 
     screen.blit(cat_surface, (screen_pos, 0))  # block image transfer
 
+    # collision
     for i in doorlist:
-        pos_in_mask = pos[0] - i.rect.x, pos[1] - i.rect.y
-        touching = i.rect.collidepoint(*pos) and i.mask.get_at(pos_in_mask)
-        if touching and pos == posClick:
-            i.setFlag(True)
+        # pos_in_mask = pos[0] - i.rect.x, pos[1] - i.rect.y
+        # touching = i.rect.collidepoint(*pos) and i.mask.get_at(pos_in_mask)
+        # if touching and pos == posClick:
+        #
         i.draw()
+        offsetX = i.rect.x - mouseKeys[keyState].keyRect.left
+        offsetY = i.rect.y - mouseKeys[keyState].keyRect.top
+        if mouseKeys[keyState].mask.overlap(i.mask, (offsetX, offsetY)) and pos == posClick:
+            i.setFlag(True)
 
     screen.blit(text_surface, (350, 50))
     screen.blit(keyUI, (0, 0))
-    player.draw()
+    mouseKeys[keyState].draw()
 
     for j in keyList:
         j.draw()
+
+    # collision
+
+    # hides mouse cursor
+    pygame.mouse.set_cursor(
+        (8, 8), (0, 0), (0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0))
 
     pygame.display.update()
     clock.tick(60)  # constant frame rate

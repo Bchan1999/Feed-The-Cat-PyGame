@@ -1,6 +1,5 @@
 import pygame
 
-
 class Key:
     def __init__(self, screen, keyImg, keyHighlight, rectx, recty):
         self.keyImg = pygame.image.load(keyImg).convert_alpha()
