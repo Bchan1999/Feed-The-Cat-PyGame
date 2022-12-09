@@ -1,34 +1,11 @@
 from cgi import test
 import pygame
 from sys import exit
+from Door import *
+from Key import *
+from Player import *
 
 # starts pygmae and instantiates all libraries
-
-
-class Door:
-    def __init__(self, rectx, recty, closedImg, openImg):
-        self.closed = pygame.image.load(closedImg).convert_alpha()
-        self.open = pygame.image.load(openImg).convert_alpha()
-        self.rect = self.closed.get_rect(center=(rectx, recty))
-        self.mask = pygame.mask.from_surface(self.closed)
-        self.rectB = self.open.get_rect(center=(rectx, recty))
-        self.maskB = pygame.mask.from_surface(self.open)
-        self.flag = False
-
-    def draw(self):
-        if self.flag:
-            screen.blit(self.open, self.rect)
-        else:
-            screen.blit(self.closed, self.rect)
-
-    def setFlag(self, flag):
-        self.flag = flag
-
-    def changeXandY(self, rectx):
-        self.rect = self.closed.get_rect(center=(rectx, 500))
-
-    def changeXandYB(self, rectx):
-        self.rect = self.open.get_rect(center=(rectx, 500))
 
 
 pygame.init()
@@ -58,25 +35,35 @@ keyflag = False
 doorOpen = True
 doorlen = 5
 x = 1
+
 doorlist = []
+keyList = []
+
 touching = False
 posClick = any
 
 rflag = False
 lflag = False
 
-#loads all door images from graphics
-#x variable defines how many doors need to be loaded into the game
-#A is closed door
-#B is open door
+# loads all door images from graphics
+# x variable defines how many doors need to be loaded into the game
+# A is closed door
+# B is open door
 while (x <= doorlen):
     file = 'graphics/Door' + str(x) + 'A.png'
     fileB = 'graphics/Door' + str(x) + 'B.png'
-    door = Door(rectx, recty, file, fileB)
+    door = Door(screen, rectx, recty, file, fileB)
     doorlist.append(door)
+
+    keyFile = 'graphics/Keys/Key' + str(x) + '.png'
+    keyHighlightFile = 'graphics/Keys/Key' + str(x) + 'H.png'
+    key = Key(screen, keyFile, keyHighlightFile, rectx, recty)
+    keyList.append(key)
     x += 1
 
 print(doorlist)
+
+player = Player('graphics/Keys/Key3.png', screen)
 
 
 def addSpeed():
@@ -148,5 +135,10 @@ while True:
 
     screen.blit(text_surface, (350, 50))
     screen.blit(keyUI, (0, 0))
+    player.draw()
+
+    for j in keyList:
+        j.draw()
+
     pygame.display.update()
     clock.tick(60)  # constant frame rate
