@@ -2,7 +2,7 @@ import pygame
 
 
 class Door:
-    def __init__(self, screen, rectx, recty, closedImg, openImg):
+    def __init__(self, x, screen, rectx, recty, closedImg, openImg):
         self.closed = pygame.image.load(closedImg).convert_alpha()
         self.open = pygame.image.load(openImg).convert_alpha()
         self.rect = self.closed.get_rect(center=(rectx, recty))
@@ -11,6 +11,7 @@ class Door:
         self.maskB = pygame.mask.from_surface(self.open)
         self.flag = False
         self.screen = screen
+        self.x = x
 
     def draw(self):
         if self.flag:

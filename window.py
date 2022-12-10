@@ -56,16 +56,16 @@ keyState = 0
 while (x <= doorlen):
     file = 'graphics/Doors/Door' + str(x) + 'A.png'
     fileB = 'graphics/Doors/Door' + str(x) + 'B.png'
-    door = Door(screen, rectx, recty, file, fileB)
+    door = Door(x, screen, rectx, recty, file, fileB)
     doorlist.append(door)
 
     keyFile = 'graphics/Keys/Key' + str(x) + '.png'
     keyHighlightFile = 'graphics/Keys/Key' + str(x) + 'H.png'
-    key = Key(screen, keyFile, keyHighlightFile, rectx, recty)
+    key = Key(x, screen, keyFile, keyHighlightFile, rectx, recty)
     keyList.append(key)
 
     mouseFile = 'graphics/MouseKeys/Key' + str(x) + '.png'
-    player = Player(mouseFile, screen)
+    player = Player(x, mouseFile, screen)
     mouseKeys.append(player)
     x += 1
 
@@ -127,6 +127,8 @@ while True:
                     keyState -= 1
                 print(keyState)
         if event.type == pygame.MOUSEBUTTONUP:
+            posClick = 0
+        if event.type == pygame.MOUSEBUTTONDOWN:
             posClick = pygame.mouse.get_pos()
 
     if keyflag == True:
@@ -148,17 +150,30 @@ while True:
         # if touching and pos == posClick:
         #
         i.draw()
+        print(keyState)
         offsetX = i.rect.x - mouseKeys[keyState].keyRect.left
         offsetY = i.rect.y - mouseKeys[keyState].keyRect.top
         if mouseKeys[keyState].mask.overlap(i.mask, (offsetX, offsetY)) and pos == posClick:
-            i.setFlag(True)
+            if mouseKeys[keyState].x == i.x:
+                i.setFlag(True)
+                mouseKeys.pop(keyState)
+                keyList.pop(keyState)
+                if (len(mouseKeys) == keyState):
+                    keyState -= 1
+                elif (keyState == 0):
+                    keyState += 1
+                else:
+                    keyState += 1
 
     screen.blit(text_surface, (350, 50))
     screen.blit(keyUI, (0, 0))
+    print(len(mouseKeys))
     mouseKeys[keyState].draw()
 
     for j in keyList:
         j.draw()
+
+    keyList[keyState].drawHighlight()
 
     # collision
 
