@@ -136,14 +136,14 @@ while True:
                     keyflag = True
                     rflag = True
                     lflag = False
-                    screen_change = -20
-                    rect_change = -20
+                    screen_change = -16
+                    rect_change = -16
                 elif event.key == pygame.K_LEFT:
                     keyflag = True
                     rflag = False
                     lflag = True
-                    screen_change = 20
-                    rect_change = 20
+                    screen_change = 16
+                    rect_change = 16
                 if event.key == pygame.K_UP:
                     if (len(mouseKeys) - 1 == keyState):
                         keyState = 0
@@ -187,7 +187,7 @@ while True:
 
         screen.blit(cat_surface, (screen_pos, 0))  # block image transfer
 
-        if seconds > 30:
+        if seconds > 25:
             pygame.mixer.Sound.stop(theme)
             pygame.mixer.Sound.play(scare)
             gameState = 2
