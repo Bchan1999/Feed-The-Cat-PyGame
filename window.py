@@ -14,6 +14,7 @@ openSound = pygame.mixer.Sound('Sounds/openDoor.mp3')
 invalidSound = pygame.mixer.Sound('Sounds/invalidDoor.mp3')
 theme = pygame.mixer.Sound('Sounds/theme.mp3')
 scare = pygame.mixer.Sound('Sounds/jumpscare.mp3')
+foundFood = pygame.mixer.Sound('Sounds/win.wav')
 
 pygame.init()
 screen = pygame.display.set_mode((1500, 1000))
@@ -40,6 +41,13 @@ lbackground = pygame.image.load(
 
 lose = pygame.image.load('graphics/lose/lose.png').convert_alpha()
 win = pygame.image.load('graphics/win/win.png').convert_alpha()
+
+# cat animation
+cat1 = pygame.image.load('graphics/Final/Cat1.png').convert_alpha()
+cat2 = pygame.image.load('graphics/Final/Cat2.png').convert_alpha()
+cat3 = pygame.image.load('graphics/Final/Cat3.png').convert_alpha()
+cat4 = pygame.image.load('graphics/Final/Cat4.png').convert_alpha()
+cat5 = pygame.image.load('graphics/Final/Cat5.png').convert_alpha()
 
 # Variables
 screen_pos = -1500
@@ -86,10 +94,10 @@ def loadFile():
     print(rand)
     while (x <= doorlen):
         catFoodFile = ''
-        file = 'graphics/Doors/Door' + str(x) + 'A.png'
-        fileB = 'graphics/Doors/Door' + str(x) + 'B.png'
+        file = 'graphics/Doors/D/Door' + str(x) + 'A.png'
+        fileB = 'graphics/Doors/D/Door' + str(x) + 'B.png'
         if x == rand:
-            catFoodFile = 'graphics/Doors/Door' + str(x) + 'BFood.png'
+            catFoodFile = 'graphics/Doors/D/Door' + str(x) + 'BFood.png'
         door = Door(x, screen, rectx, recty, file, fileB, catFoodFile)
         doorlist.append(door)
 
@@ -187,7 +195,7 @@ while True:
 
         screen.blit(cat_surface, (screen_pos, 0))  # block image transfer
 
-        if seconds > 25:
+        if seconds > 30:
             pygame.mixer.Sound.stop(theme)
             pygame.mixer.Sound.play(scare)
             gameState = 2
@@ -203,8 +211,8 @@ while True:
             # print(keyState)
             if i.isWin == True and i.flag == True:
                 pygame.mixer.Sound.stop(theme)
-
                 if (resetTimer):
+                    pygame.mixer.Sound.play(foundFood)
                     start_ticks = pygame.time.get_ticks()  # starter tick
                     resetTimer = False
                 doneSec = (pygame.time.get_ticks()-start_ticks) / \
@@ -230,6 +238,18 @@ while True:
                 else:
                     pygame.mixer.Sound.play(invalidSound)
 
+        # cat animation
+        if seconds < 10:
+            screen.blit(cat1, (screen_pos, 0))
+        elif seconds < 15 and seconds > 10:
+            screen.blit(cat2, (screen_pos, 0))
+        elif seconds < 20 and seconds > 15:
+            screen.blit(cat3, (screen_pos, 0))
+        elif seconds < 25 and seconds > 20:
+            screen.blit(cat4, (screen_pos, 0))
+        elif seconds < 30 and seconds > 25:
+            screen.blit(cat5, (screen_pos, 0))
+
         screen.blit(text_surface, (350, 50))
         screen.blit(keyUI, (0, 0))
         mouseKeys[keyState].draw()
@@ -238,8 +258,6 @@ while True:
             j.draw()
 
         keyList[keyState].drawHighlight()
-
-        # collision
 
         # hides mouse cursor
         pygame.mouse.set_cursor(
