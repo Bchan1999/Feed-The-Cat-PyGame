@@ -9,13 +9,13 @@ This game is for people who enjoy fast paced puzzle games and the horror genre. 
 # Theme 
 It takes place in an old and eerie house
 
-#Goal
+# Goal
 You have 14 keys that unlock the 14 doors in the house, You have to find which door the cat food is in before the timer runs out. The timer is an audio cue rather than visual 
 
-#Mechanics 
+# Mechanics 
 Using the up and down arrow keys, the player can rotate through the different keys. Using the left and right keys, the player can pan around the room seeing all the doors. And with the mouse, the player hovers over a door to open it if the key matches the door
 
-#Uniqueness 
+# Uniqueness 
 
 Theres a lot of cute/scary contrast. A typical puzzle game meant for kids, cute cat, and children's lullably playing in the background.
 But the cat coming towards the screen as the player struggles to find the food, the music playing a terrifying lubably melody, the darkness of the room deeply contrasts the cuteness of the game. 
