@@ -28,19 +28,17 @@ cat_surface = pygame.image.load('graphics/room.PNG').convert_alpha()
 text_surface = test_font.render('My game', False, 'Red')
 keyUI = pygame.image.load('graphics/UI.png').convert_alpha()
 
-l1 = pygame.image.load('graphics/Start_Screen/L1.png').convert_alpha()
-l2 = pygame.image.load('graphics/Start_Screen/L2.png').convert_alpha()
-l3 = pygame.image.load('graphics/Start_Screen/L3.png').convert_alpha()
-l4 = pygame.image.load('graphics/Start_Screen/L4.png').convert_alpha()
-l5 = pygame.image.load('graphics/Start_Screen/L5.png').convert_alpha()
-l6 = pygame.image.load('graphics/Start_Screen/L6.png').convert_alpha()
-l7 = pygame.image.load('graphics/Start_Screen/L7.png').convert_alpha()
-l8 = pygame.image.load('graphics/Start_Screen/L8.png').convert_alpha()
-lbackground = pygame.image.load(
-    'graphics/Start_Screen/Background.png').convert_alpha()
+introScene = pygame.image.load('graphics/start/Start.png').convert_alpha()
+tutorial = pygame.image.load('graphics/tutorial/Tutorial.png').convert_alpha()
 
-lose = pygame.image.load('graphics/lose/lose.png').convert_alpha()
-win = pygame.image.load('graphics/win/win.png').convert_alpha()
+lose = pygame.image.load('graphics/lose/Lose2.png').convert_alpha()
+win = pygame.image.load('graphics/win/Win2.png').convert_alpha()
+
+# outside animation
+out1 = pygame.image.load(
+    'graphics/Doors/Outside1/Outside1.png').convert_alpha()
+out2 = pygame.image.load(
+    'graphics/Doors/Outside2/Outside2.png').convert_alpha()
 
 # cat animation
 cat1 = pygame.image.load('graphics/Final/Cat1.png').convert_alpha()
@@ -122,6 +120,7 @@ def addSpeed():
 
 soundState = True
 gameState = 1
+o = 0
 loadFile()
 # will never be false and must be broken from the inside
 while True:
@@ -195,7 +194,7 @@ while True:
 
         screen.blit(cat_surface, (screen_pos, 0))  # block image transfer
 
-        if seconds > 30:
+        if seconds > 40:
             pygame.mixer.Sound.stop(theme)
             pygame.mixer.Sound.play(scare)
             gameState = 2
@@ -238,16 +237,18 @@ while True:
                 else:
                     pygame.mixer.Sound.play(invalidSound)
 
+        screen.blit(out1, (screen_pos, 0))
+
         # cat animation
         if seconds < 10:
             screen.blit(cat1, (screen_pos, 0))
         elif seconds < 15 and seconds > 10:
             screen.blit(cat2, (screen_pos, 0))
-        elif seconds < 20 and seconds > 15:
+        elif seconds < 25 and seconds > 15:
             screen.blit(cat3, (screen_pos, 0))
-        elif seconds < 25 and seconds > 20:
+        elif seconds < 35 and seconds > 25:
             screen.blit(cat4, (screen_pos, 0))
-        elif seconds < 30 and seconds > 25:
+        elif seconds < 40 and seconds > 35:
             screen.blit(cat5, (screen_pos, 0))
 
         screen.blit(text_surface, (350, 50))
@@ -264,36 +265,15 @@ while True:
             (8, 8), (0, 0), (0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0))
     elif gameState == 1:
         # calculate the time since some reference point (here the Unix Epoch)
-
-        screen.blit(lbackground, (0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()  # this also closes the while loop
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    gameState = 0
+                    gameState = 4
+        screen.blit(introScene, (0, 0))
 
-        # beginning scene animation
-        if seconds < 0.5:
-            screen.blit(l1, (0, 0))
-        elif seconds < 1 and seconds > 0.5:
-            screen.blit(l2, (0, 0))
-        elif seconds < 1.5 and seconds > 1:
-            screen.blit(l3, (0, 0))
-        elif seconds < 2 and seconds > 1.5:
-            screen.blit(l4, (0, 0))
-        elif seconds < 2.5 and seconds > 2:
-            screen.blit(l5, (0, 0))
-        elif seconds < 3 and seconds > 2.5:
-            screen.blit(l6, (0, 0))
-        elif seconds < 3.5 and seconds > 3:
-            screen.blit(l7, (0, 0))
-        elif seconds < 5 and seconds > 3.5:
-            screen.blit(l8, (0, 0))
-        elif seconds < 5.5 and seconds > 5:
-            screen.blit(l8, (0, 0))
-            t0 = t1
     elif gameState == 2:
         screen.blit(lose, (0, 0))
         for event in pygame.event.get():
@@ -309,6 +289,7 @@ while True:
                     t0 = t1
                     x = 1
                     soundState = True
+                    resetTimer = True
                     loadFile()
     elif gameState == 3:  # gameOver State
         screen.blit(win, (0, 0))
@@ -325,6 +306,19 @@ while True:
                     t0 = t1
                     x = 1
                     soundState = True
+                    resetTimer = True
                     loadFile()
+    elif gameState == 4:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()  # this also closes the while loop
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    t0 = t1
+                    gameState = 0
+
+        screen.blit(tutorial, (0, 0))
+
     pygame.display.update()
     clock.tick(60)  # constant frame rate
