@@ -16,6 +16,7 @@ theme = pygame.mixer.Sound('Sounds/theme.mp3')
 scare = pygame.mixer.Sound('Sounds/jumpscare.mp3')
 foundFood = pygame.mixer.Sound('Sounds/win.wav')
 
+
 pygame.init()
 screen = pygame.display.set_mode((1500, 1000))
 pygame.display.set_caption('FeedTheCat')
@@ -198,8 +199,6 @@ while True:
             pygame.mixer.Sound.stop(theme)
             pygame.mixer.Sound.play(scare)
             gameState = 2
-
-        # collision
 
         for i in doorlist:
             # pos_in_mask = pos[0] - i.rect.x, pos[1] - i.rect.y
