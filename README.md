@@ -1,7 +1,5 @@
 # Feed The Cat 
 
-Feed the Cat
-
 Find the correct locked door with cat food before the timer runs out and the cat kills you. 
 
 This game is for people who enjoy fast paced puzzle games and the horror genre. Also players who enjoy replaying a challenging obstacle to improve their performance at the game.
@@ -17,6 +15,6 @@ Using the up and down arrow keys, the player can rotate through the different ke
 
 # Uniqueness 
 
-Theres a lot of cute/scary contrast. A typical puzzle game meant for kids, cute cat, and children's lullably playing in the background.
+The game takes cute elements but contrasts it with a horror setting, adding to the anxiety for the player. A typical puzzle game meant for kids, cute cat, and children's lullably playing in the background.
 But the cat coming towards the screen as the player struggles to find the food, the music playing a terrifying lubably melody, the darkness of the room deeply contrasts the cuteness of the game. 
 This contrast adds the horror aspect to it giving the player more anxiety to find the food quickly. 
