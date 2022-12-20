@@ -1,5 +1,11 @@
 # Feed The Cat 
 
+# How To Play
+
+Run the command:
+
+py .\window.py
+
 Find the correct locked door with cat food before the timer runs out and the cat kills you. 
 
 This game is for people who enjoy fast paced puzzle games and the horror genre. Also players who enjoy replaying a challenging obstacle to improve their performance at the game.
