@@ -26,7 +26,6 @@ test_font = pygame.font.Font('font/Pixeltype.ttf', 50)
 # conver() helps game run faster
 cat_surface = pygame.image.load('graphics/room.PNG').convert_alpha()
 # ground_surface = pygame.image.load('graphics/ground.png').convert()
-text_surface = test_font.render('My game', False, 'Red')
 keyUI = pygame.image.load('graphics/UI.png').convert_alpha()
 
 introScene = pygame.image.load('graphics/start/Start.png').convert_alpha()
@@ -249,8 +248,6 @@ while True:
             screen.blit(cat4, (screen_pos, 0))
         elif seconds < 40 and seconds > 35:
             screen.blit(cat5, (screen_pos, 0))
-
-        screen.blit(text_surface, (350, 50))
         screen.blit(keyUI, (0, 0))
         mouseKeys[keyState].draw()
 
